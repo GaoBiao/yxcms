@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx" xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean class="org.hebgb.web.spring.SpringContextHolder" />
+	<bean id="imageUploadUtils" class="org.hebgb.utils.file.FileUploadUtils">
+		<property name="fileTypes" value="${system.upload.image.type}" />
+		<property name="rootDir" value="${system.upload.file.rootDir}" />
+		<property name="savePath" value="${system.upload.image.savePath}" />
+		<property name="baseUrl" value="${system.upload.file.baseUrl}" />
+		<property name="maxFileSize" value="${system.upload.file.maxSize}"></property>
+	</bean>
+</beans>

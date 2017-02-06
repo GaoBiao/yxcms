@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.0.xsd" default-lazy-init="true">
+	<bean id="adminRealm" class="org.hebgb.web.shiro.authc.realm.DefaultAuthorizingRealm">
+		<property name="credentialsMatcher" ref="passwordMatcher" />
+		<property name="shiroService" ref="adminService" />
+	</bean>
+	<bean id="adminSecurityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="adminRealm" />
+		<property name="cacheManager" ref="shiroCacheManager" />
+	</bean>
+	<bean id="adminFormAuthenticationFilter" class="org.hebgb.web.shiro.authc.filter.UsernamePasswordAuthenticationFilter">
+		<!-- 登录成功后的跳转地址 -->
+		<property name="successUrl" value="/admin/list.do" />
+		<!-- 登录地址 -->
+		<property name="loginUrl" value="/admin/login.do" />
+		<!-- 设置登录名参数名，默认为username -->
+		<property name="usernameParam" value="loginName" />
+		<!-- 设置登录验证码请求，如果不需要验证码可不设置次参数 -->
+		<property name="captchaUrl" value="/admin/captcha" />
+	</bean>
+	<bean id="adminShiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="adminSecurityManager" />
+		<property name="unauthorizedUrl" value="/admin/login.do?unauthorized" />
+		<property name="filters">
+			<map>
+				<entry key="adminAuthc" value-ref="adminFormAuthenticationFilter" />
+			</map>
+		</property>
+		<property name="filterChainDefinitions">
+			<value>
+				/admin/init.do = anon
+				/admin/login.do = adminAuthc
+				/admin/** = adminAuthc,roles[admin]
+			</value>
+		</property>
+	</bean>
+</beans>
